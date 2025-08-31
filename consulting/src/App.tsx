@@ -10,7 +10,7 @@ const Frame = styled.iframe`
 `;
 
 function App() {
-  return <Frame src="/topology/index.html" title="Topology Replica" />;
+  return <Frame src="/topology/index.html" title="Evolve" />;
 }
 
 export default App;
