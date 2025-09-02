@@ -58,7 +58,7 @@
                   <a class="link-hover | js-desktop-nav-link" href="#team" role="menuitem" data-section="team">Team</a>
               </li>
                                       <li role="none">
-                  <a class="link-hover | js-desktop-nav-link" href="#public-goods" role="menuitem" data-section="public-goods">Public goods</a>
+                  <a class="link-hover | js-desktop-nav-link" href="#contact" role="menuitem" data-section="contact">Contact</a>
               </li>
                                                                   </ul>
 
@@ -86,7 +86,7 @@
                       <a class="js-mobile-nav-link" href="https://www.topology.vc/#team" role="menuitem" data-section="team">Team</a>
                   </li>
                                                                   <li role="none">
-                      <a class="js-mobile-nav-link" href="https://www.topology.vc/#public_goods" role="menuitem" data-section="public_goods">Public goods</a>
+                      <a class="js-mobile-nav-link" href="#contact" role="menuitem" data-section="contact">Contact</a>
                   </li>
                                                                           </ul>
       </nav>
@@ -138,7 +138,7 @@
 
 <!-- div to create scroll space -->
 <div class="w-1/1 h-150dvh pointer-events-none | js-webgl-scroll-start"></div>	<div class="d-flex items-center justify-center fixed fill h-100dvh pointer-events-none js-webgl-title">
-<h2 class="t-white t-72 t-100@sm | js-webgl-title-text"><div style="position: relative; display: inline-block; translate: none; rotate: none; scale: none; opacity: 1; visibility: visible; transform: translate(0px, 0px);">You</div> <div style="position: relative; display: inline-block; translate: none; rotate: none; scale: none; opacity: 1; visibility: visible; transform: translate(0px, 0px);">request...</div></h2>
+<h2 class="t-white t-72 t-100@sm | js-webgl-title-text"><div style="position: relative; display: inline-block; translate: none; rotate: none; scale: none; opacity: 1; visibility: visible; transform: translate(0px, 0px);">You</div> <div style="position: relative; display: inline-block; translate: none; rotate: none; scale: none; opacity: 1; visibility: visible; transform: translate(0px, 0px);">ask...</div></h2>
 </div>
 
 <!-- div to create scroll space -->
@@ -286,7 +286,7 @@
 
 <div class="w-1/1 h-100dvh d-flex flex-column justify-end | js-footer-webgl-start">
   <div class="container-fluid">
-    <footer class="footer relative mb-32 | js-footer">
+    <footer id="contact" class="footer relative mb-32 | js-footer">
   <div class="split-border split-border--top hide-corners | js-split-border" style="translate: none; rotate: none; scale: none; transform: translate(0px, 162.5px) scale(0, 1);"></div>    <div class="footer__outer overflow-hidden | js-footer:outer" style="mask-size: 100% 0%;">
       <div class="p-20 d-flex@md justify-between | js-footer:inner">
           <div class="d-flex flex-column justify-between mb-30 mb-0@md">
@@ -338,39 +338,65 @@ var globalData = {"publicUrl":"\/wp-content\/themes\/topology\/public\/","assets
 <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon="{&quot;rayId&quot;:&quot;977bf2f31b02e1f5&quot;,&quot;serverTiming&quot;:{&quot;name&quot;:{&quot;cfExtPri&quot;:true,&quot;cfEdge&quot;:true,&quot;cfOrigin&quot;:true,&quot;cfL4&quot;:true,&quot;cfSpeedBrain&quot;:true,&quot;cfCacheStatus&quot;:true}},&quot;version&quot;:&quot;2025.8.0&quot;,&quot;token&quot;:&quot;a66cead13a5f42ae9c1887df8c6d81b3&quot;}" crossorigin="anonymous"></script>
 
 <script>
-// Simple logo transition script
-console.log('Logo script loaded');
+// Header cycles continuously; About logo animates once on first view then stays static
+(function() {
+  const animatedSrc = '/wp-content/themes/topology/public/images/Animated_Evolve.webp';
+  const staticSrc = '/wp-content/themes/topology/public/images/Static_Evolve.webp';
+  const cycleIntervalMs = 3000;
 
-function switchLogos() {
-    console.log('Attempting to switch logos...');
-    
-    // Find the logos
-    const animatedLogo = document.querySelector('.js-animated-logo-header\\:animated');
-    const staticLogo = document.querySelector('.js-animated-logo-header\\:static');
-    
-    console.log('Found logos:', { animatedLogo, staticLogo });
-    
-    if (animatedLogo && staticLogo) {
-        console.log('Switching logos now...');
-        animatedLogo.style.visibility = 'hidden';
-        staticLogo.style.visibility = 'visible';
-        console.log('Logo switch complete');
-    } else {
-        console.log('Could not find one or both logos');
+  // Preload to avoid flicker
+  const preloadAnimated = new Image();
+  preloadAnimated.src = animatedSrc;
+  const preloadStatic = new Image();
+  preloadStatic.src = staticSrc;
+
+  function updateHeaderLogo(showAnimated) {
+    const headerAnimated = document.querySelector('.js-animated-logo-header\\:animated');
+    const headerStatic = document.querySelector('.js-animated-logo-header\\:static');
+    if (headerAnimated && headerStatic) {
+      headerAnimated.style.visibility = showAnimated ? 'visible' : 'hidden';
+      headerStatic.style.visibility = showAnimated ? 'hidden' : 'visible';
     }
-}
+  }
 
-// Wait for page to load, then switch after 3 seconds
-window.addEventListener('load', function() {
-    console.log('Page loaded, will switch logos in 3 seconds...');
-    setTimeout(switchLogos, 3000);
-});
+  function setupSectionLogoOnce() {
+    const sectionLogo = document.querySelector('.js-animated-logo');
+    if (!sectionLogo) return;
 
-// Also try immediately after DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM ready, will switch logos in 3 seconds...');
-    setTimeout(switchLogos, 3000);
-});
+    let playedOnce = false;
+    const observer = new IntersectionObserver((entries, obs) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && !playedOnce) {
+          playedOnce = true;
+          sectionLogo.src = animatedSrc;
+          sectionLogo.style.visibility = 'visible';
+          setTimeout(() => {
+            sectionLogo.src = staticSrc;
+            obs.disconnect();
+          }, cycleIntervalMs);
+        }
+      }
+    }, { root: null, threshold: 0.25 });
+
+    observer.observe(sectionLogo);
+  }
+
+  function startCycle() {
+    let showAnimated = true;
+    updateHeaderLogo(showAnimated);
+    setInterval(() => {
+      showAnimated = !showAnimated;
+      updateHeaderLogo(showAnimated);
+    }, cycleIntervalMs);
+    setupSectionLogoOnce();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startCycle, { once: true });
+  } else {
+    startCycle();
+  }
+})();
 </script>
 
 
