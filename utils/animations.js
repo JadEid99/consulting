@@ -36897,7 +36897,6 @@ function ik() {
       );
     }),
     (U.publicUrl = window.globalData.publicUrl),
-    (U.assetsUrl = window.globalData.assetsUrl),
     (U.staticComponents = new xb()),
     (U.components = new xb()));
 }
@@ -51544,21 +51543,7 @@ class Jz {
   async loadProjectState(e, t) {
     ((U.theatre.helper = new Kz()),
       (U.theatre.rafDriver = Ke.createRafDriver()));
-    let n;
-    if (U.urlParams.has("version")) {
-      const i = U.urlParams.get("version");
-      ((n = await (
-        await fetch(
-          "//www.topology.vc/wp-content/themes/topology/public/theatre.php" +
-            "?download",
-          {
-            method: "POST",
-            body: JSON.stringify({ filename: i, projectId: t }),
-          },
-        )
-      ).json()),
-        (n = JSON.parse(n)));
-    } else n = Zz[`/resources/assets/theatre/${t}/state.json`];
+    let n = Zz[`/resources/assets/theatre/${t}/state.json`];
     return (
       (U.theatre.project = Ke.getProject(e, {
         state: n,
